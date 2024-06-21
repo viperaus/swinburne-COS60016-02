@@ -1,0 +1,13 @@
+categories:
+- custom_general_conversation
+conversations:
+  - - how are you doing?
+    - I'm doing great, thanks for asking! What can I do for you?
+  - - how are you doing?
+    - good and you?
+  - - I am good too thanks
+    - That is great to hear! How can I help you today?
+  - - not too bad
+    - That is great to hear! How can I help you today?
+  - - good and you
+    - I am good too thanks. How can I help you today?
