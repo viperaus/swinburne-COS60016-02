@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="/static/style.css">
+    <link rel="stylesheet" type="text/css" href="/static/chat-bubbles.css">
+    <script
+			  src="https://code.jquery.com/jquery-3.7.1.min.js"
+			  integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+			  crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <div id="container">
+      <div id="chatbox">
+        <div class="imessage">
+          <p class="bot-message"><span>Hi! I'm Ronnie.</span></p>
+        </div>
+      </div>
+      <div id="userInput">
+        <input id="textInput" type="text" name="question" placeholder="Message">
+        <input id="buttonInput" type="submit" value="Send">
+      </div>
+      <script>
+        
+        function getBotResponse() {
+          var rawText = $("#textInput").val();
+          var userHtml = '<p class="user-message"><span>' + rawText + '</span></p>';
+          
+          $("#textInput").val("");
+          $("#chatbox .imessage").append(userHtml);
+          
+          document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+
+          $.ajax({method:'GET', url:"/get", data: {question: rawText}, success: function(data) {
+            console.log(data)
+            var botHtml = '<p class="bot-message"><span>' + data + '</span></p>';
+            console.log(botHtml)
+            $("#chatbox .imessage").append(botHtml);
+            document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+          }});
+        }
+
+        $("#textInput").keypress(function(e) {
+            if ((e.which == 13) && document.getElementById("textInput").value != "" ){
+                getBotResponse();
+            }
+        });
+
+        $("#buttonInput").click(function() {
+            if (document.getElementById("textInput").value != "") {
+                getBotResponse();
+            }
+        })
+      </script>
+    </div>
+  </body>
+</html>
