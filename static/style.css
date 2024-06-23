@@ -49,7 +49,7 @@ h3 {
   width: 75%;
   border: none;
   border-bottom: 3px solid #009688;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Arial Narrow', Arial, sans-serif;
   font-size: 17px;
 }
 
@@ -59,13 +59,13 @@ h3 {
 
 #buttonInput {
   padding: 3px;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Arial Narrow', Arial, sans-serif;
   font-size: 17px;
 }
 
 .userText1 {
   color: white;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Arial Narrow', Arial, sans-serif;
   font-size: 17px;
   text-align: right;
   line-height: 30px;
@@ -79,7 +79,7 @@ h3 {
 
 .botMessage1 {
   color: white;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Arial Narrow', Arial, sans-serif;
   font-size: 17px;
   text-align: left;
   line-height: 30px;
