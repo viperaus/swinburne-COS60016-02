@@ -16,33 +16,40 @@ chatbot = ChatBot('Ronnie',
                   read_only=True,
                   logger=custom_logger)
 
+# add logic adapters
 chatbot.logic_adapters.append(WeatherInCityAdapter(chatbot))
 chatbot.logic_adapters.append(BestMatch(chatbot, excluded_words=["time"]))
 chatbot.logic_adapters.append(TimeLogicAdapter(chatbot))
 
+# check if training has been completed in the past
 training_data_exists = os.path.exists('export.log')
 if not training_data_exists:
+    
+    # initialize trainer
     trainer = ChatterBotCorpusTrainer(chatbot)
     trainer.train("chatterbot.corpus.english.botprofile")
     trainer.train("chatterbot.corpus.english.conversations")
     trainer.train("chatterbot.corpus.english.emotion")
     trainer.train("chatterbot.corpus.english.greetings")
     trainer.train("chatterbot.corpus.english.humor")
-    # locate training folder
+    
+    # set training folder name
     directory = 'training_data'
-
+    
+    # loop through training folder
     for filename in os.listdir(directory):
-        if filename.endswith(".txt"): # only pick txt file for training
-            print('\n Chatbot training with '+os.path.join(directory, filename)+' file')
-            training_data = open(os.path.join(directory, filename)).read().splitlines()
-            trainer = ListTrainer(chatbot) # bot training
-            trainer.train(training_data)
-        if filename.endswith(".yml"): # only pick yaml file for training
-            print('\n Chatbot training with '+os.path.join(directory, filename)+' file')
-            #training_data = open(os.path.join(directory, filename)).read()
-            trainer = ChatterBotCorpusTrainer(chatbot) # bot training
-            trainer.train(directory+"."+filename.split(".")[0])
+        if filename.endswith(".txt"): # pick txt file for training as a conversation
+            print('\n Chatbot training with '+os.path.join(directory, filename)+' file') # provide feedback to user
+            training_data = open(os.path.join(directory, filename)).read().splitlines() # read txt file
+            trainer = ListTrainer(chatbot) # reinitialize trainer
+            trainer.train(training_data) # train conversation
+        if filename.endswith(".yml"): # pick yml file for training as a corpus 
+            print('\n Chatbot training with '+os.path.join(directory, filename)+' file') # provide feedback to user
+            trainer = ChatterBotCorpusTrainer(chatbot) # reinitialize trainer
+            trainer.train(directory+"."+filename.split(".")[0]) # train corpus
         else:
+            continue # skip to next file
+
             continue
 
 
