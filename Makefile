@@ -14,7 +14,7 @@ train: venv/scripts/activate
 
 clean-training:
 		rm -rf ./db.sqlite3
-		rm -rf ./export.json
+		rm -rf ./.training_completed
 		rm -rf ./sentence_tokenizer.pickle
 
 clean:

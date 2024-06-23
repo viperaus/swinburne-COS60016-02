@@ -199,3 +199,4 @@ next-env.d.ts
 /static/styles/styles.css
 
 sentence_tokenizer.pickle
+.training_completed

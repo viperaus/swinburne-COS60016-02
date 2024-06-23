@@ -1,4 +1,5 @@
 import os
+import json
 from chatterbot import ChatBot
 from chatterbot.trainers import ChatterBotCorpusTrainer
 from chatterbot.trainers import ListTrainer
@@ -22,7 +23,7 @@ chatbot.logic_adapters.append(BestMatch(chatbot, excluded_words=["time"]))
 chatbot.logic_adapters.append(TimeLogicAdapter(chatbot))
 
 # check if training has been completed in the past
-training_data_exists = os.path.exists('export.log')
+training_data_exists = os.path.exists(".training_completed")
 if not training_data_exists:
     
     # initialize trainer
@@ -50,19 +51,6 @@ if not training_data_exists:
         else:
             continue # skip to next file
 
-            continue
-
-
-while True:
-    try:
-        request = input("You: ")
-        if request.lower() == "bye":
-            print("Goodbye!")
-            raise SystemExit
-        bot_response = chatbot.get_response(request)
-        print(f"{chatbot.name}: {bot_response}")
-    except(KeyboardInterrupt, EOFError, SystemExit):
-        print("Exiting...")
-        trainer.export_for_training('export.log')
-        break
-
+data = {'training_completed': True}
+with open(".training_completed", 'w+') as txtfile:
+    json.dump(data, txtfile, ensure_ascii=False) 
