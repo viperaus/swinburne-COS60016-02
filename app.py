@@ -1,12 +1,17 @@
+import os
 from flask import Flask, render_template, request, jsonify
 from chatterbot import ChatBot
 from chatterbot.logic import LogicAdapter, BestMatch, TimeLogicAdapter
 from ChatterbotAdapters.weather import WeatherInCityAdapter
 import logging
 
-
 logging.basicConfig(level=logging.INFO)
 custom_logger = logging.getLogger(__name__)
+
+training_data_exists = os.path.exists(".training_completed")
+if not training_data_exists:
+    print("Training data not found. Please run the training script first using the command 'make setup'")
+    exit()
 
 app = Flask(__name__)
 
@@ -29,7 +34,6 @@ def home():
 def get_bot_response():
     user_input = request.args.get('question')
     return str(chatbot.get_response(user_input))
-
 
 if __name__ == "__main__":
     app.run()
