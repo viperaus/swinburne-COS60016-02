@@ -19,7 +19,5 @@ clean-training:
 
 clean:
 		rm -rf ./__pycache__
-		rm -rf ./handlers/__pycache__
-		rm -rf ./modules/__pycache__
-		rm -rf ./tests/__pycache__
+		rm -rf ./ChatterbotAdapters/__pycache__
 		rm -rf ./.venv
