@@ -84,34 +84,8 @@ class WeatherInCityAdapter(LogicAdapter):
         date, desc, min, max, cloud_cover, humidity, pressure, precipitation, wind  = data
         response_statement = Statement(text = f"The weather in {city_name} is {desc} with a temperature of {max}°C. Cloud cover is {cloud_cover}%. Rainfall is {precipitation} mm. Wind is {wind} m/s. Pressure is {pressure} hPa. Humidity is {humidity}%. {future_data_table}")
         response_statement.confidence = 1
-
-
-
-
-        # if city_name in [city.lower() for city in self.city_list]:
-
-        #     data = self.getCityWeather(city_name)
-            
-        #     if data['cod'] == 200:
-        #         response_statement = Statement(text = f"The weather in {city_name} is {data['weather'][0]['description']} with a high of {data['main']['temp_max']}°C and a low of {data['main']['temp_min']}°C.")
-        #         response_statement.confidence = 1
-        #     else:
-        #         response_statement = Statement(text = f"Sorry, I cannot access real-time information for {city_name}.")
-        #         response_statement.confidence = 0.1
-        # else:
-        #     # get the data for the city
-        #     self.db.populateDBWithCityData(city_name)
-        #     self.db.getWeatherForCity(city_name)
-
-
-        #     response_statement = Statement(text = f"Sorry, information for {city_name} is not available.")
-        #     response_statement.confidence = 0.1
             
         return response_statement
-  
-    # def getCityWeather(self, city):
-    #     response = requests.get(base_url, params={"q": city, "appid": weather_api_key, "units":"metric"})
-    #     return response.json()
 
 class WeatherDB():
     def __init__(self):
@@ -218,7 +192,11 @@ class WeatherDB():
     def numberOfFutureWeatherRecordsForCity(self, city: str):
         now = datetime.now()
         date_time = now.strftime("%Y-%m-%d")
-        return self.cur.execute("SELECT COUNT(*) FROM weather_forecast WHERE city = ? AND date(`date`) >= ? GROUP BY date(`date`)", (city, date_time, )).fetchone()[0]
+        results = self.cur.execute("SELECT COUNT(*) FROM (SELECT COUNT(*) FROM weather_forecast WHERE city = ? AND date(`date`) >= ? GROUP BY date(`date`))", (city, date_time, )).fetchone()
+        if results is None:
+            return 0
+        else:
+            return results[0]
 
     def populateWeatherForCityIfLessThanFiveRecords(self, city: str):
         if self.numberOfFutureWeatherRecordsForCity(city) < 5:
