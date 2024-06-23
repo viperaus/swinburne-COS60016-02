@@ -33,7 +33,8 @@ class WeatherInCityAdapter(LogicAdapter):
   
     def __init__(self, chatbot):
         super().__init__(chatbot)
-        self.city_list = city_list
+        self.city_list = [city.lower() for city in city_list]
+        self.use_custom_cities = False
 
     def can_process(self, statement) -> bool:
         # Check if the statement includes "what is the weather in"
@@ -52,6 +53,11 @@ class WeatherInCityAdapter(LogicAdapter):
             city_name = statement.lower().split("temperature in")[-1].strip().split("?")[0]
         else:
             city_name = statement.lower().split("weather in")[-1].strip().split("?")[0]
+        
+        if self.use_custom_cities == False and city_name not in self.city_list:
+            response_statement = Statement(text = f"Sorry, information for {city_name} is not available.")
+            response_statement.confidence = 1
+            return response_statement
 
         self.db = WeatherDB()
 
@@ -78,7 +84,7 @@ class WeatherInCityAdapter(LogicAdapter):
                 future_data_table += f"Date: {day[0]} - Max: {str(day[1])} - Min: {str(day[2])}<br />"
         if data is None:
             response_statement = Statement(text = f"Sorry, information for {city_name} is not available.")
-            response_statement.confidence = 0.1
+            response_statement.confidence = 1
             return response_statement
     
         date, desc, min, max, cloud_cover, humidity, pressure, precipitation, wind  = data
